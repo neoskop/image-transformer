@@ -11,7 +11,7 @@ export const generateJpeg = async (params: GeneratorParams, size: Size) => {
 
   const jpegFilePath = changeExtension(
     targetFilepath,
-    `${size.suffix}${extname === 'jpg' ? 'jpg' : 'jpeg'}`
+    `${size.suffix}${extname === '.jpg' ? '.jpg' : '.jpeg'}`
   );
 
   if (!fs.existsSync(jpegFilePath)) {
