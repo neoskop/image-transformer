@@ -10,7 +10,7 @@ export const generatePng = async (params: GeneratorParams, size: Size) => {
 
   if (!fs.existsSync(pngFilepath)) {
     sharp(filePath)
-      .resize(size.width, size.height)
+      .resize(size.width, size.height, { withoutEnlargement: true })
       .png(opts.formats.png)
       .toFile(pngFilepath);
   }

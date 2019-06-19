@@ -10,7 +10,7 @@ export const generateJpeg = async (params: GeneratorParams, size: Size) => {
 
   if (!fs.existsSync(jpegFilePath)) {
     sharp(filePath)
-      .resize(size.width, size.height)
+      .resize(size.width, size.height, {withoutEnlargement: true})
       .jpeg(opts.formats.jpg)
       .toFile(jpegFilePath);
   }

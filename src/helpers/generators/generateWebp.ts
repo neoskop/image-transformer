@@ -10,7 +10,7 @@ export const generateWebp = async (params: GeneratorParams, size: Size) => {
 
   if (!fs.existsSync(webpFilePath)) {
     sharp(filePath)
-      .resize(size.width, size.height)
+      .resize(size.width, size.height, { withoutEnlargement: true })
       .webp(opts.formats.webp)
       .toFile(webpFilePath);
   }
