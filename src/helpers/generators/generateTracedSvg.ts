@@ -8,16 +8,21 @@ export const generateTracedSvg = async (params: GeneratorParams) => {
   const { filePath, targetFilepath, opts } = params;
   const tracedSourcePngPath = changeExtension(targetFilepath, `png`);
   if (!fs.existsSync(tracedSourcePngPath)) {
-    sharp(filePath)
-      .resize(opts.traced.width)
-      .png()
-      .toFile(tracedSourcePngPath)
-      .then(async () => {
-        const traced = await traceSVG(tracedSourcePngPath, opts.traced.color);
-        return fs.promises.writeFile(
-          changeExtension(targetFilepath, `traced.svg`),
-          traced.data
-        );
-      });
+    return new Promise(resolve => {
+      sharp(filePath)
+        .resize(opts.traced.width)
+        .png()
+        .toFile(tracedSourcePngPath)
+        .then(async () => {
+          const traced = await traceSVG(tracedSourcePngPath, opts.traced.color);
+          await fs.promises.writeFile(
+            changeExtension(targetFilepath, `traced.svg`),
+            traced.data
+          );
+          resolve();
+        });
+    });
   }
+
+  return Promise.resolve();
 };
