@@ -29,6 +29,7 @@ const transform = async (opts: ImageTransformerOpts): Promise<void> => {
         if (err) {
           reject(err);
         } else {
+          logger(`successfully transformed all assets`);
           resolve();
         }
       }
