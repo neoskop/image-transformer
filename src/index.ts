@@ -20,12 +20,20 @@ const transform = async (opts: ImageTransformerOpts): Promise<void> => {
 
   await mkdirp(destinationDir);
 
-  async.eachLimit(
-    filePaths,
-    5,
-    (filePath, callback) => transformFile(filePath, callback, mergedOpts),
-    err => console.log(err)
-  );
+  return new Promise((resolve, reject) => {
+    async.eachLimit(
+      filePaths,
+      5,
+      (filePath, callback) => transformFile(filePath, callback, mergedOpts),
+      err => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      }
+    );
+  });
 };
 
 export default transform;
