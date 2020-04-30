@@ -1,13 +1,10 @@
-import fs from 'fs';
 import path from 'path';
 import { ImageTransformerOpts } from '../types/config';
-import { changeExtension } from './changeExtension';
 import { generateJpeg } from './generators/generateJpeg';
 import { generatePng } from './generators/generatePng';
 import generateSVG from './generators/generateSVG';
 import { generateTracedSvg } from './generators/generateTracedSvg';
 import { generateWebp } from './generators/generateWebp';
-import optimizeSvg from './optimizeSvg';
 
 const transformFile = async (
   filePath: string,
@@ -24,26 +21,7 @@ const transformFile = async (
   switch (extension) {
     case '.svg':
       // if file is svg, optimized svg
-      promises.push(
-        (async () => {
-          const file = await fs.promises.readFile(filePath, 'utf-8');
-          const svgFilepath = changeExtension(targetFilepath, `svg`);
-          const optimizedSvg = await optimizeSvg(file);
-
-          if (fs.existsSync(svgFilepath)) {
-            const existedFile = await fs.promises.readFile(
-              svgFilepath,
-              'utf-8'
-            );
-
-            if (existedFile === optimizedSvg.data) {
-              return;
-            }
-          }
-
-          await fs.promises.writeFile(svgFilepath, optimizedSvg.data);
-        })()
-      );
+      promises.push(generateSVG({ filePath, targetFilepath, opts }));
       break;
     case '.png':
       // if file is png, generate webp + optimized png
