@@ -9,7 +9,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -p tsconfig.json && yarn build:js",
-    "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline"
+    "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
+    "format": "yarn prettier --write ."
   },
   "author": "",
   "license": "MIT",
@@ -38,6 +39,7 @@
     "@types/glob": "7.1.1",
     "@types/sharp": "0.22.2",
     "@types/svgo": "1.2.1",
+    "prettier": "2.0.5",
     "rimraf": "2.6.3",
     "typescript": "3.5.3"
   }
