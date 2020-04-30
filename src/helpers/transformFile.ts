@@ -1,13 +1,13 @@
 import fs from 'fs';
 import path from 'path';
-import sharp from 'sharp';
 import { ImageTransformerOpts } from '../types/config';
 import { changeExtension } from './changeExtension';
-import { generateTracedSvg } from './generators/generateTracedSvg';
-import optimizeSvg from './optimizeSvg';
-import { generatePng } from './generators/generatePng';
-import { generateWebp } from './generators/generateWebp';
 import { generateJpeg } from './generators/generateJpeg';
+import { generatePng } from './generators/generatePng';
+import generateSVG from './generators/generateSVG';
+import { generateTracedSvg } from './generators/generateTracedSvg';
+import { generateWebp } from './generators/generateWebp';
+import optimizeSvg from './optimizeSvg';
 
 const transformFile = async (
   filePath: string,
@@ -19,19 +19,31 @@ const transformFile = async (
     .resolve(filePath)
     .replace(path.resolve(opts.source), path.resolve(opts.destination));
 
-  const promises: Promise<any>[] = [];
+  const promises: Promise<void>[] = [];
 
   switch (extension) {
     case '.svg':
-      // if file is svg, only optimize the svg file and then quit
-      const file = await fs.promises.readFile(filePath, 'utf-8');
+      // if file is svg, optimized svg
+      promises.push(
+        (async () => {
+          const file = await fs.promises.readFile(filePath, 'utf-8');
+          const svgFilepath = changeExtension(targetFilepath, `svg`);
+          const optimizedSvg = await optimizeSvg(file);
 
-      const svgFilepath = changeExtension(targetFilepath, `svg`);
+          if (fs.existsSync(svgFilepath)) {
+            const existedFile = await fs.promises.readFile(
+              svgFilepath,
+              'utf-8'
+            );
 
-      if (!fs.existsSync(svgFilepath)) {
-        const optimizedSvg = await optimizeSvg(file);
-        await fs.promises.writeFile(svgFilepath, optimizedSvg.data);
-      }
+            if (existedFile === optimizedSvg.data) {
+              return;
+            }
+          }
+
+          await fs.promises.writeFile(svgFilepath, optimizedSvg.data);
+        })()
+      );
       break;
     case '.png':
       // if file is png, generate webp + optimized png
