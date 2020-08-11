@@ -2,7 +2,6 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "esnext",
-    "emitDeclarationOnly": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
     "sourceMap": true,
@@ -13,7 +12,7 @@
     "declaration": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "lib": ["dom", "esnext"]
+    "lib": ["dom", "esnext"],
   },
   "include": ["src/**/*", "index.d.ts"]
 }
