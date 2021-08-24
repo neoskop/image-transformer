@@ -1,5 +1,4 @@
 import { ImageTransformerOpts } from './types/config';
-import async from 'async';
 import getFilePaths from './helpers/getFilePaths';
 import defaultOpts from './config/default';
 import transformFile from './helpers/transformFile';
@@ -23,22 +22,11 @@ const transform = async (opts: ImageTransformerOpts): Promise<void> => {
   });
 
   await Promise.all(promises);
-
-  return new Promise((resolve, reject) => {
-    async.eachLimit(
-      filePaths,
-      5,
-      (filePath, callback) => transformFile(filePath, callback, mergedOpts),
-      err => {
-        if (err) {
-          reject(err);
-        } else {
-          logger(`successfully transformed all assets`);
-          resolve();
-        }
-      }
-    );
+  const pMap = (await import('p-map')).default;
+  await pMap(filePaths, filePath => transformFile(filePath, mergedOpts), {
+    concurrency: 5
   });
+  logger(`successfully transformed all assets`);
 };
 
 export default transform;

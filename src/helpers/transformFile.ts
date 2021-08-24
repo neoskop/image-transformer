@@ -8,7 +8,6 @@ import { generateWebp } from './generators/generateWebp';
 
 const transformFile = async (
   filePath: string,
-  callback: any,
   opts: Required<ImageTransformerOpts>
 ): Promise<void> => {
   const extension = path.extname(filePath);
@@ -49,7 +48,6 @@ const transformFile = async (
       break;
   }
   await Promise.all(promises);
-  callback();
 };
 
 export default transformFile;
