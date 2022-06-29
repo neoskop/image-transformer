@@ -14,7 +14,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "async": "3.2.0",
+    "async": "3.2.2",
     "bluebird": "3.7.2",
     "chalk": "4.1.0",
     "fs-extra": "9.0.1",
